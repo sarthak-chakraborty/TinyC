@@ -8,10 +8,9 @@ Install using:
 
 `sudo apt-get install yacc`
 
+
 Run using:
-
 `make clean`
-
 `make`
 
 `make test`
