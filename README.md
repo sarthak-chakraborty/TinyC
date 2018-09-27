@@ -1,6 +1,7 @@
 # TinyC
 Compiler for TinyC (a subset of C)
 
+
 Flex and Yacc needs to be installed in the system.
 Install using:
 
@@ -10,7 +11,9 @@ Install using:
 
 
 Run using:
+
 `make clean`
+
 `make`
 
 `make test`
