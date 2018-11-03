@@ -1,0 +1,329 @@
+0++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Symbol Table:- Global                                             Parent:- null
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Name            Type          Category    Init Val    Size    Offset    Nested table
+====================================================================================================
+test            int           local       5           4       0         null
+t00             int           temp        5           4       4         null
+d               double        local       2.3         8       8         null
+t01             double        temp        2.3         8       16        null
+i               int           local                   4       24        null
+w               arr(10, int)  local                   40      28        null
+t02             int           temp        10          4       68        null
+a               int           local       4           4       72        null
+t03             int           temp        4           4       76        null
+p               ptr(int)      local                   4       80        null
+b               int           local                   4       84        null
+func            void          function                0       88        func
+c               char          local                   1       88        null
+main            int           function                4       89        main
+f1              double        function                8       93        f1
+f2              ptr(char)     function                4       101       f2
+factorial       int           function                4       105       factorial
+add             int           function                4       109       add
+----------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Symbol Table:- func                                               Parent:- Global
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Name            Type          Category    Init Val    Size    Offset    Nested table
+====================================================================================================
+i               int           param                   4       0         null
+d               double        param                   8       4         null
+c               char          param                   1       12        null
+j               int           local                   4       13        null
+----------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Symbol Table:- main                                               Parent:- Global
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Name            Type          Category    Init Val    Size    Offset    Nested table
+====================================================================================================
+retVal          int           local                   4       0         null
+a               arr(10, int)  local       1           40      4         null
+t00             int           temp        10          4       44        null
+t01             int           temp                    4       48        null
+x               ptr(int)      local                   4       52        null
+y               int           local                   4       56        null
+t02             ptr(int)      temp                    4       60        null
+t03             ptr(null)     temp                    4       64        null
+t04             int           temp                    4       68        null
+t05             int           temp                    4       72        null
+t06             int           temp                    4       76        null
+t07             int           temp        1           4       80        null
+b               int           local       2           4       84        null
+t08             int           temp        2           4       88        null
+c               int           local                   4       92        null
+t09             int           temp                    4       96        null
+t10             int           temp                    4       100       null
+t11             int           temp                    4       104       null
+t12             int           temp                    4       108       null
+check           int           local                   4       112       null
+t13             int           temp                    4       116       null
+t14             int           temp                    4       120       null
+t15             int           temp                    4       124       null
+t16             int           temp                    4       128       null
+t17             int           temp                    4       132       null
+t18             int           temp                    4       136       null
+t19             int           temp                    4       140       null
+t20             int           temp                    4       144       null
+i               int           local                   4       148       null
+t21             int           temp                    4       152       null
+n               int           local       6           4       156       null
+t22             int           temp        6           4       160       null
+fn              int           local                   4       164       null
+d               int           local                   4       168       null
+t23             char          temp                    1       172       null
+factorial       int           local                   4       173       null
+t24             int           temp                    4       177       null
+t25             int           temp                    4       181       null
+t26             int           temp        10          4       185       null
+v               int           local       5           4       189       null
+t27             int           temp        5           4       193       null
+d1              double        local       123.456     8       197       null
+t28             double        temp        123.456     8       205       null
+f1              int           local                   4       213       null
+t29             int           temp                    4       217       null
+ex1             ptr(char)     local       "halo"      4       221       null
+t30             ptr(char)     temp        "halo"      4       225       null
+ex2             ptr(char)     local                   4       229       null
+f2              int           local                   4       233       null
+t31             int           temp                    4       237       null
+t32             int           temp        1           4       241       null
+t33             int           temp                    4       245       null
+t34             int           temp        10          4       249       null
+t35             int           temp                    4       253       null
+t36             int           temp                    4       257       null
+t37             int           temp                    4       261       null
+t38             int           temp                    4       265       null
+t39             int           temp                    4       269       null
+t40             int           temp        1           4       273       null
+t41             int           temp                    4       277       null
+t42             int           temp                    4       281       null
+t43             int           temp                    4       285       null
+t44             int           temp                    4       289       null
+t45             int           temp                    4       293       null
+t46             int           temp                    4       297       null
+t47             int           temp        2           4       301       null
+t48             int           temp                    4       305       null
+func            int           local                   4       309       null
+t49             int           temp                    4       313       null
+t50             int           temp        1           4       317       null
+t51             int           temp                    4       321       null
+ar1             arr(0, int)   local                   0       325       null
+t52             int           temp        1           4       325       null
+t53             int           temp        2           4       329       null
+t54             int           temp        4           4       333       null
+----------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Symbol Table:- f1                                                 Parent:- Global
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Name            Type          Category    Init Val    Size    Offset    Nested table
+====================================================================================================
+i               double        param                   8       0         null
+retVal          double        local                   8       8         null
+x               double        local       12.31       8       16        null
+t00             double        temp        12.31       8       24        null
+y               double        local       32.54       8       32        null
+t01             double        temp        32.54       8       40        null
+z               double        local                   8       48        null
+t02             double        temp                    8       56        null
+t03             double        temp                    8       64        null
+t04             double        temp                    8       72        null
+t05             double        temp                    8       80        null
+----------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Symbol Table:- f2                                                 Parent:- Global
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Name            Type          Category    Init Val    Size    Offset    Nested table
+====================================================================================================
+ci              ptr(char)     param                   4       0         null
+retVal          char          local                   1       4         null
+----------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Symbol Table:- factorial                                          Parent:- Global
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Name            Type          Category    Init Val    Size    Offset    Nested table
+====================================================================================================
+n               int           param                   4       0         null
+retVal          int           local                   4       4         null
+t00             int           temp        1           4       8         null
+t01             int           temp                    4       12        null
+t02             int           temp        1           4       16        null
+factorial       int           local                   4       20        null
+t03             int           temp        1           4       24        null
+t04             int           temp                    4       28        null
+t05             int           temp                    4       32        null
+t06             int           temp                    4       36        null
+t07             int           temp                    4       40        null
+t08             int           temp                    4       44        null
+----------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Symbol Table:- add                                                Parent:- Global
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Name            Type          Category    Init Val    Size    Offset    Nested table
+====================================================================================================
+a               int           param                   4       0         null
+b               int           param                   4       4         null
+retVal          int           local                   4       8         null
+t00             int           temp        10          4       12        null
+t01             int           temp                    4       16        null
+x               ptr(int)      local                   4       20        null
+y               int           local                   4       24        null
+t02             ptr(int)      temp                    4       28        null
+t03             ptr(null)     temp                    4       32        null
+t04             int           temp                    4       36        null
+t05             int           temp                    4       40        null
+t06             int           temp                    4       44        null
+----------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++++++++++++++++++++++++++++++++
+	 Quad Translation
+++++++++++++++++++++++++++++++++++++++++++++++++++
+	0  :   t00 = 5
+	1  :   test = t00
+	2  :   t01 = 2.3
+	3  :   d = t01
+	4  :   t02 = 10
+	5  :   t03 = 4
+	6  :   a = t03
+
+main: 
+
+	8  :   t00 = 10
+	9  :   a = t00
+	10 :   t02 = &y
+	11 :   x = t02
+	12 :   t04 = *x
+	13 :   *x = y
+	14 :   t05 = *x
+	15 :   y = t05
+	16 :   t07 = 1
+	17 :   a = t07
+	18 :   t08 = 2
+	19 :   b = t08
+	20 :   t10 = a + b
+	21 :   c = t10
+	22 :   t12 = a
+	23 :   a = a + 1
+	24 :   t14 = b * c
+	25 :   t16 = a + t14
+	26 :   check = t16
+	27 :   if check<c goto 30
+	28 :   goto 33
+	29 :   goto 33
+	30 :   t19 = a | b
+	31 :   c = t19
+	32 :   goto 33
+	33 :   a = a + 1
+	34 :   i = a
+	35 :   t22 = 6
+	36 :   n = t22
+	37 :   fn = d
+	38 :   t23 = c
+	39 :   d = t23
+	40 :   param n
+	41 :   t24 = call factorial, 1
+	42 :   fn = t24
+	43 :   t26 = 10
+	44 :   t27 = 5
+	45 :   v = t27
+	46 :   t28 = 123.456
+	47 :   d1 = t28
+	48 :   param d1
+	49 :   t29 = call f1, 1
+	50 :   d = t29
+	51 :   ex1 = t30
+	52 :   param ex1
+	53 :   t31 = call f2, 1
+	54 :   ex2 = t31
+	55 :   t32 = 1
+	56 :   i = t32
+	57 :   t34 = 10
+	58 :   t35 = t34 * 4
+	59 :   t36 = a[t35]
+	60 :   if i<t36 goto 65
+	61 :   goto 68
+	62 :   t38 = i
+	63 :   i = i + 1
+	64 :   goto 57
+	65 :   t39 = i
+	66 :   i = i + 1
+	67 :   goto 62
+	68 :   t40 = 1
+	69 :   t42 = i - t40
+	70 :   i = t42
+	71 :   t44 = i * 4
+	72 :   t45 = a[t44]
+	73 :   if t45<v goto 68
+	74 :   goto 75
+	75 :   t47 = 2
+	76 :   i = t47
+	77 :   param d
+	78 :   t49 = call func, 1
+	79 :   d = t49
+	80 :   goto 83
+	81 :   if v==0 goto 89
+	82 :   goto 86
+	83 :   if i==0 goto 89
+	84 :   goto 81
+	85 :   goto 89
+	86 :   t50 = 1
+	87 :   i = t50
+	88 :   goto 89
+	89 :   t52 = 1
+	90 :   t53 = 2
+	91 :   t54 = 4
+	92 :   ar1 = ar1
+	93 :   ret 
+
+f1: 
+
+	95 :   t00 = 12.31
+	96 :   x = t00
+	97 :   t01 = 32.54
+	98 :   y = t01
+	99 :   t03 = x * i
+	100:   t05 = t03 / y
+	101:   z = t05
+
+f2: 
+
+
+factorial: 
+
+	104:   t00 = 1
+	105:   if n==t00 goto 108
+	106:   goto 110
+	107:   goto 110
+	108:   t02 = 1
+	109:   goto 110
+	110:   t03 = 1
+	111:   t05 = n - t03
+	112:   param t05
+	113:   t06 = call factorial, 1
+	114:   t08 = n * t06
+
+func: 
+
+
+func: 
+
+	117:   j = c
+	118:   ret 
+
+add: 
+
+	120:   t00 = 10
+	121:   a = t00
+	122:   t02 = &y
+	123:   x = t02
+	124:   t04 = *x
+	125:   *x = y
+	126:   t05 = *x
+	127:   y = t05
+--------------------------------------------------

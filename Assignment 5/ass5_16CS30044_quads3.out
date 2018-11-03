@@ -1,0 +1,149 @@
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Symbol Table:- Global                                             Parent:- null
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Name            Type          Category    Init Val    Size    Offset    Nested table
+====================================================================================================
+test            int           local       3           4       0         null
+t00             int           temp        3           4       4         null
+func            void          function                0       8         func
+add             int           function                4       8         add
+main            void          function                0       12        main
+----------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Symbol Table:- func                                               Parent:- Global
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Name            Type          Category    Init Val    Size    Offset    Nested table
+====================================================================================================
+----------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Symbol Table:- add                                                Parent:- Global
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Name            Type          Category    Init Val    Size    Offset    Nested table
+====================================================================================================
+a               int           param                   4       0         null
+b               int           param                   4       4         null
+retVal          int           local                   4       8         null
+t00             int           temp        10          4       12        null
+t01             int           temp                    4       16        null
+x               ptr(int)      local                   4       20        null
+y               int           local                   4       24        null
+t02             ptr(int)      temp                    4       28        null
+t03             ptr(null)     temp                    4       32        null
+t04             int           temp                    4       36        null
+t05             int           temp                    4       40        null
+t06             int           temp                    4       44        null
+----------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Symbol Table:- main                                               Parent:- Global
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Name            Type          Category    Init Val    Size    Offset    Nested table
+====================================================================================================
+i               int           local                   4       0         null
+a               arr(10, int)  local                   40      4         null
+t00             int           temp        10          4       44        null
+v               int           local       3           4       48        null
+t01             int           temp        3           4       52        null
+d               double        local                   8       56        null
+d1              double        local                   8       64        null
+t02             int           temp        1           4       72        null
+t03             int           temp                    4       76        null
+t04             int           temp        10          4       80        null
+t05             int           temp                    4       84        null
+t06             int           temp                    4       88        null
+t07             int           temp                    4       92        null
+t08             int           temp                    4       96        null
+t09             int           temp                    4       100       null
+t10             int           temp        1           4       104       null
+t11             int           temp                    4       108       null
+t12             int           temp                    4       112       null
+t13             int           temp                    4       116       null
+t14             int           temp                    4       120       null
+t15             int           temp                    4       124       null
+t16             int           temp                    4       128       null
+t17             int           temp        2           4       132       null
+t18             int           temp                    4       136       null
+t19             int           temp        1           4       140       null
+t20             int           temp                    4       144       null
+t21             int           temp                    4       148       null
+t22             int           temp                    4       152       null
+t23             int           temp                    4       156       null
+t24             int           temp                    4       160       null
+t25             int           temp        4           4       164       null
+t26             int           temp                    4       168       null
+t27             int           temp                    4       172       null
+t28             int           temp                    4       176       null
+t29             int           temp                    4       180       null
+t30             int           temp                    4       184       null
+----------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++++++++++++++++++++++++++++++++
+	 Quad Translation
+++++++++++++++++++++++++++++++++++++++++++++++++++
+	0  :   t00 = 3
+	1  :   test = t00
+
+add: 
+
+	3  :   t00 = 10
+	4  :   a = t00
+	5  :   t02 = &y
+	6  :   x = t02
+	7  :   t04 = *x
+	8  :   *x = y
+	9  :   t05 = *x
+	10 :   y = t05
+
+main: 
+
+	12 :   t00 = 10
+	13 :   t01 = 3
+	14 :   v = t01
+	15 :   t02 = 1
+	16 :   i = t02
+	17 :   t04 = 10
+	18 :   t05 = t04 * 4
+	19 :   t06 = a[t05]
+	20 :   if i<t06 goto 25
+	21 :   goto 28
+	22 :   t08 = i
+	23 :   i = i + 1
+	24 :   goto 17
+	25 :   t09 = i
+	26 :   i = i + 1
+	27 :   goto 22
+	28 :   t10 = 1
+	29 :   t12 = i - t10
+	30 :   i = t12
+	31 :   t14 = i * 4
+	32 :   t15 = a[t14]
+	33 :   if t15<v goto 28
+	34 :   goto 35
+	35 :   t17 = 2
+	36 :   i = t17
+	37 :   goto 40
+	38 :   if v==0 goto 46
+	39 :   goto 43
+	40 :   if i==0 goto 46
+	41 :   goto 38
+	42 :   goto 46
+	43 :   t19 = 1
+	44 :   i = t19
+	45 :   goto 46
+	46 :   t21 = i * 4
+	47 :   t22 = a[t21]
+	48 :   if v>t22 goto 50
+	49 :   goto 53
+	50 :   t24 = i
+	51 :   i = i - 1
+	52 :   goto 46
+	53 :   t25 = 4
+	54 :   t26 = t25 * 4
+	55 :   a[t26] = i
+	56 :   t28 = i * 4
+	57 :   t29 = a[t28]
+	58 :   v = t29
+	59 :   ret 
+--------------------------------------------------

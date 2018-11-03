@@ -1,0 +1,127 @@
+0++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Symbol Table:- Global                                             Parent:- null
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Name            Type          Category    Init Val    Size    Offset    Nested table
+====================================================================================================
+func            void          function                0       0         func
+main            int           function                4       0         main
+----------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Symbol Table:- func                                               Parent:- Global
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Name            Type          Category    Init Val    Size    Offset    Nested table
+====================================================================================================
+i               int           param                   4       0         null
+d               double        param                   8       4         null
+a               int           local                   4       12        null
+t00             int           temp        4           4       16        null
+t01             int           temp                    4       20        null
+t02             int           temp                    4       24        null
+b               int           local                   4       28        null
+t03             int           temp        1           4       32        null
+t04             int           temp                    4       36        null
+t05             int           temp                    4       40        null
+z               int           local       3           4       44        null
+t06             int           temp        3           4       48        null
+t07             int           temp        3           4       52        null
+t08             int           temp                    4       56        null
+t09             int           temp                    4       60        null
+t10             int           temp                    4       64        null
+----------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Symbol Table:- main                                               Parent:- Global
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Name            Type          Category    Init Val    Size    Offset    Nested table
+====================================================================================================
+retVal          int           local                   4       0         null
+x               int           local       50          4       4         null
+t00             int           temp        50          4       8         null
+y               int           local       13          4       12        null
+t01             int           temp        13          4       16        null
+b               double        local       100.0       8       20        null
+t02             double        temp        100.0       8       28        null
+z               int           local                   4       36        null
+t03             int           temp                    4       40        null
+t04             int           temp                    4       44        null
+a               int           local                   4       48        null
+t05             int           temp                    4       52        null
+t06             int           temp                    4       56        null
+ans             int           local                   4       60        null
+t07             int           temp                    4       64        null
+t08             int           temp                    4       68        null
+t09             double        temp                    8       72        null
+t10             double        temp                    8       80        null
+mod             int           local                   4       88        null
+t11             int           temp                    4       92        null
+t12             int           temp                    4       96        null
+div             int           local                   4       100       null
+t13             int           temp                    4       104       null
+t14             int           temp                    4       108       null
+dif             double        local                   8       112       null
+t15             double        temp                    8       120       null
+t16             double        temp                    8       128       null
+t17             int           temp                    4       136       null
+t18             int           temp                    4       140       null
+t19             int           temp                    4       144       null
+t20             int           temp                    4       148       null
+t21             double        temp                    8       152       null
+----------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++++++++++++++++++++++++++++++++
+	 Quad Translation
+++++++++++++++++++++++++++++++++++++++++++++++++++
+
+func: 
+
+
+func: 
+
+	2  :   t00 = 4
+	3  :   t02 = i | t00
+	4  :   a = t02
+	5  :   t03 = 1
+	6  :   t05 = i - t03
+	7  :   b = t05
+	8  :   t06 = 3
+	9  :   z = t06
+	10 :   t07 = 3
+	11 :   t09 = i + t07
+	12 :   i = t09
+
+main: 
+
+	14 :   t00 = 50
+	15 :   x = t00
+	16 :   t01 = 13
+	17 :   y = t01
+	18 :   t02 = 100.0
+	19 :   b = t02
+	20 :   t04 = x + y
+	21 :   z = t04
+	22 :   t06 = x * y
+	23 :   a = t06
+	24 :   t07 = double2int(b)
+	25 :   t08 = t07 * x
+	26 :   ans = t08
+	27 :   t09 = int2double(x)
+	28 :   t10 = t09 * b
+	29 :   ans = t10
+	30 :   t12 = x % y
+	31 :   mod = t12
+	32 :   t14 = x / y
+	33 :   div = t14
+	34 :   t15 = int2double(x)
+	35 :   t16 = t15 - b
+	36 :   dif = t16
+	37 :   t17 = y
+	38 :   y = y + 1
+	39 :   x = x - 1
+	40 :   t18 = ~y
+	41 :   a = t18
+	42 :   t20 = -y
+	43 :   t21 = int2double(t20)
+	44 :   b = t21
+	45 :   ret 
+--------------------------------------------------

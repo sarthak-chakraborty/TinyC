@@ -1,0 +1,148 @@
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Symbol Table:- Global                                             Parent:- null
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Name            Type          Category    Init Val    Size    Offset    Nested table
+====================================================================================================
+i               int           local       1           4       0         null
+t00             int           temp        1           4       4         null
+main            int           function                4       8         main
+----------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Symbol Table:- main                                               Parent:- Global
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Name            Type          Category    Init Val    Size    Offset    Nested table
+====================================================================================================
+retVal          int           local                   4       0         null
+a               int           local       1           4       4         null
+t00             int           temp        1           4       8         null
+b               int           local       2           4       12        null
+t01             int           temp        2           4       16        null
+c               int           local                   4       20        null
+x               double        local       3.0         8       24        null
+t02             double        temp        3.0         8       32        null
+y               double        local       5.78        8       40        null
+t03             double        temp        5.78        8       48        null
+t04             int           temp                    4       56        null
+t05             int           temp                    4       60        null
+t06             int           temp                    4       64        null
+t07             int           temp                    4       68        null
+t08             int           temp        2           4       72        null
+t09             int           temp                    4       76        null
+t10             int           temp                    4       80        null
+t11             int           temp        2           4       84        null
+t12             int           temp                    4       88        null
+t13             int           temp                    4       92        null
+t14             int           temp                    4       96        null
+t15             int           temp                    4       100       null
+t16             int           temp                    4       104       null
+d               double        local                   8       108       null
+e               double        local                   8       116       null
+t17             double        temp                    8       124       null
+t18             double        temp                    8       132       null
+t19             double        temp                    8       140       null
+t20             int           temp                    4       148       null
+t21             int           temp                    4       152       null
+t22             double        temp                    8       156       null
+f               int           local                   4       164       null
+t23             int           temp                    4       168       null
+t24             int           temp                    4       172       null
+t25             int           temp                    4       176       null
+t26             int           temp                    4       180       null
+t27             int           temp                    4       184       null
+t28             int           temp                    4       188       null
+check           int           local                   4       192       null
+t29             int           temp                    4       196       null
+t30             int           temp                    4       200       null
+t31             int           temp                    4       204       null
+t32             int           temp                    4       208       null
+t33             int           temp                    4       212       null
+t34             int           temp                    4       216       null
+t35             int           temp                    4       220       null
+t36             int           temp                    4       224       null
+i               int           local                   4       228       null
+t37             int           temp                    4       232       null
+t38             int           temp                    4       236       null
+t39             int           temp                    4       240       null
+t40             int           temp                    4       244       null
+----------------------------------------------------------------------------------------------------
+
+++++++++++++++++++++++++++++++++++++++++++++++++++
+	 Quad Translation
+++++++++++++++++++++++++++++++++++++++++++++++++++
+	0  :   t00 = 1
+	1  :   i = t00
+
+main: 
+
+	3  :   t00 = 1
+	4  :   a = t00
+	5  :   t01 = 2
+	6  :   b = t01
+	7  :   t02 = 3.0
+	8  :   x = t02
+	9  :   t03 = 5.78
+	10 :   y = t03
+	11 :   t05 = a + b
+	12 :   c = t05
+	13 :   t07 = a
+	14 :   a = a + 1
+	15 :   t08 = 2
+	16 :   t09 = a >> t08
+	17 :   a = t09
+	18 :   t11 = 2
+	19 :   t12 = b << t11
+	20 :   b = t12
+	21 :   t15 = a / b
+	22 :   b = t15
+	23 :   t17 = int2double(a)
+	24 :   t18 = t17 + d
+	25 :   d = t18
+	26 :   t21 = a * b
+	27 :   t22 = int2double(t21)
+	28 :   e = t22
+	29 :   t24 = b % c
+	30 :   f = t24
+	31 :   if c==a goto 34
+	32 :   goto 36
+	33 :   goto 36
+	34 :   ret 
+	35 :   goto 36
+	36 :   if b>a goto 39
+	37 :   goto 40
+	38 :   goto 44
+	39 :   goto 42
+	40 :   t27 = a
+	41 :   goto 44
+	42 :   t27 = b
+	43 :   goto 44
+	44 :   a = t27
+	45 :   t30 = b * c
+	46 :   t32 = a + t30
+	47 :   check = t32
+	48 :   if check<c goto 51
+	49 :   goto 54
+	50 :   goto 54
+	51 :   t35 = a | b
+	52 :   c = t35
+	53 :   goto 54
+	54 :   a = a + 1
+	55 :   t37 = b
+	56 :   b = b + 1
+	57 :   t39 = a + t37
+	58 :   i = t39
+	59 :   goto 62
+	60 :   if b==0 goto 
+	61 :   goto 71
+	62 :   if a==0 goto 
+	63 :   goto 60
+	64 :   goto 70
+	65 :   goto 68
+	66 :   if d==0 goto 
+	67 :   goto 71
+	68 :   if b==0 goto 
+	69 :   goto 66
+	70 :   goto 73
+	71 :   ret 
+	72 :   goto 
+--------------------------------------------------
