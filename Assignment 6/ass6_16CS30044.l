@@ -1,83 +1,135 @@
-/* C Declarations and Definitions */
 %{
 	#include "ass6_16CS30044_translator.h"
 	#include "y.tab.h"
 	#include <stdlib.h>
 %}
 
-NZ_DIG				[1-9]
-DIG 				[0-9]
-ID_DIG 				[_a-zA-Z]
-SIGN 				[+-]
-DIG_SEQ 			{DIG}+
-EXP_PART 			([eE]{SIGN}?{DIG_SEQ})
-ZERO 				"0"
-DOT 				"."
-ESC_SEQ 			[\\a\\b\\f\\n\\r\\t\\v\\\'\\\"\\?\\\\]
-C_CHAR 				[^\'\\\n]|{ESC_SEQ}
-C_CHAR_SEQ 			{C_CHAR}+
-C_CHAR_CONST 		('\{C_CHAR_SEQ}\')
 
-S_CHAR [^\"\\\n]|{ESC_SEQ}
-S_CHAR_SEQ {S_CHAR}+
-FRACTIONAL_CONST	([0-9]+\.)|([0-9]*\.[0-9]+)
+/* Keywords */	
+AUTO					"auto"
+BREAK 					"break"
+CASE 					"case"
+CHAR 					"char"
+CONST 					"const"
+CONTINUE 				"continue"
+DEFAULT 				"deafult"
+DO 						"do"
+DOUBLE 					"double"
+ELSE 					"else"
+ENUM 					"enum"
+EXTERN					"extern"
+FLOAT 					"float"
+FOR 					"for"
+GOTO 					"goto"
+IF 						"if"
+INLINE 					"inline"
+INT 					"int"
+LONG 					"long"
+REGISTER				"register"
+RESTRICT 				"restrict"
+RETURN 					"return"
+SHORT 					"short"
+SIGNED					"signed"
+SIZEOF 					"sizeof"
+STATIC					"static"
+STRUCT 					"struct"
+SWITCH 					"switch"
+TYPEDEF 				"typedef"
+UNION 					"union"
+UNSIGNED 				"unsigned"
+VOID 					"void"
+VOLATILE 				"volatile"
+WHILE 					"while"
+_BOOL 					"_Bool"
+_COMPLEX 				"_Complex"
+_IMAGINARY				"_Imaginary"
 
-ID					[_a-zA-Z][_a-zA-Z0-9]*
-INT_CONST			([1-9][0-9]*)|"0"
-FLOAT_CONST			(((([0-9]+)?\.[0-9]+)|([0-9]+\.))([eE][+-]?[0-9]+)?)|([0-9]+[eE][+-]?[0-9]+)
-ENUM_CONST			{ID}
-CHAR_CONST			\'(([^\'\\\n]|[\\a\\b\\f\\n\\r\\t\\v\\\'\\\"\\?\\\\])+)\'
-STRING_LITERAL		\"(([^\"\\\n]|[\\a\\b\\f\\n\\r\\t\\v\\\'\\\"\\?\\\\])*)\"
-MULTI_COMMENT		"/"\*(([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*)\*+"/"
-SINGLE_COMMENT		"//".*
-WHITE_SPACE			[ \t\n\v]
+
+/* Identifier */
+ID 						[a-zA-Z_][a-zA-Z0-9_]*
+
+
+/*Constants*/
+ESC_SEQ					[\\][']|[\\]["]|[\\][?]|[\\][\\]|[\\][a]|[\\][b]|[\\][f]|[\\][n]|[\\][r]|[\\][t]|[\\][v]
+C_CHAR					[^'\n\\]|{ESC_SEQ}
+C_CHAR_SEQ				{C_CHAR}+
+CHAR_CONST				[']{C_CHAR_SEQ}[']
+S_CHAR 					[^"\n\\]|{ESC_SEQ}
+S_CHAR_SEQ				{S_CHAR}+
+STRING_CONST			["]{S_CHAR_SEQ}["]|["]["]
+INT_CONST 				[1-9][0-9]*|"0"
+DIG_SEQ					[0-9]+
+FRAC_CONST				{DIG_SEQ}[.]{DIG_SEQ}|[.]{DIG_SEQ}|{DIG_SEQ}[.]
+EXP_PART				[eE]{DIG_SEQ}|[eE][+\-]{DIG_SEQ}
+FLOAT_CONST				{FRAC_CONST}|{FRAC_CONST}{EXP_PART}|{DIG_SEQ}{EXP_PART}
+ENUM_CONST				{ID}
+
+
+/* Comments */
+SINGLE_COMMENT			[/][/][^\n]*[\n]
+SENTENCE				[^*]|[*]+[^/*]
+MULTI_COMMENT			[/][*]{SENTENCE}*[*]+[/]
+
+
+/* White Spaces */
+WS 						[ \t\n\v]
+
+
 
 %%
-"auto"					{return AUTO_KEYWORD;}
-"enum"					{return ENUM_KEYWORD;}
-"restrict"				{return RESTRICT_KEYWORD;}
-"unsigned"				{return UNSIGNED_KEYWORD;}
-"break"					{return BREAK_KEYWORD;}
-"extern"				{return EXTERN_KEYWORD;}
-"return"				{return RETURN_KEYWORD;}
-"void"					{return VOID_KEYWORD;}
-"case"					{return CASE_KEYWORD;}
-"float"					{return FLOAT_KEYWORD;}
-"short"					{return SHORT_KEYWORD;}
-"volatile"				{return VOLATILE_KEYWORD;}
-"char"					{return CHAR_KEYWORD;}
-"for"					{return FOR_KEYWORD;}
-"signed"				{return SIGNED_KEYWORD;}
-"while"					{return WHILE_KEYWORD;}
-"const"					{return CONST_KEYWORD;}
-"goto"					{return GOTO_KEYWORD;}
-"sizeof"				{return SIZEOF_KEYWORD;}
-"_Bool"					{return BOOL_KEYWORD;}
-"continue"				{return CONTINUE_KEYWORD;}
-"if"					{return IF_KEYWORD;}
-"static"				{return STATIC_KEYWORD;}
-"_Complex"				{return COMPLEX_KEYWORD;}
-"default"				{return DEFAULT_KEYWORD;}
-"inline"				{return INLINE_KEYWORD;}
-"struct"				{return STRUCT_KEYWORD;}
-"_Imaginary"			{return IMAGINARY_KEYWORD;}
-"do"					{return DO_KEYWORD;}
-"int"					{return INT_KEYWORD;}
-"switch"				{return SWITCH_KEYWORD;}
-"double"				{return DOUBLE_KEYWORD;}
-"long"					{return LONG_KEYWORD;}
-"typedef"				{return TYPEDEF_KEYWORD;}
-"else"					{return ELSE_KEYWORD;}
-"register"				{return REGISTER_KEYWORD;}
-"union"					{return UNION_KEYWORD;}
+{MULTI_COMMENT}					{/*return MULTI_LINE_COMMENT;*/}
+{SINGLE_COMMENT}				{/*return SINGLE_LINE_COMMENT;*/}
+
+{AUTO}					{return AUTO_KEYWORD;}
+{ENUM}					{return ENUM_KEYWORD;}
+{RESTRICT}				{return RESTRICT_KEYWORD;}
+{UNSIGNED}				{return UNSIGNED_KEYWORD;}
+{BREAK}					{return BREAK_KEYWORD;}
+{EXTERN}				{return EXTERN_KEYWORD;}
+{RETURN}				{return RETURN_KEYWORD;}
+{VOID}					{return VOID_KEYWORD;}
+{CASE}					{return CASE_KEYWORD;}
+{FLOAT}					{return FLOAT_KEYWORD;}
+{SHORT}					{return SHORT_KEYWORD;}
+{VOLATILE}				{return VOLATILE_KEYWORD;}
+{CHAR}					{return CHAR_KEYWORD;}
+{FOR}					{return FOR_KEYWORD;}
+{SIGNED}				{return SIGNED_KEYWORD;}
+{WHILE}					{return WHILE_KEYWORD;}
+{CONST}					{return CONST_KEYWORD;}
+{GOTO}					{return GOTO_KEYWORD;}
+{SIZEOF}				{return SIZEOF_KEYWORD;}
+{_BOOL}					{return BOOL_KEYWORD;}
+{CONTINUE}				{return CONTINUE_KEYWORD;}
+{IF}					{return IF_KEYWORD;}
+{STATIC}				{return STATIC_KEYWORD;}
+{_COMPLEX}				{return COMPLEX_KEYWORD;}
+{DEFAULT}				{return DEFAULT_KEYWORD;}
+{INLINE}				{return INLINE_KEYWORD;}
+{STRUCT}				{return STRUCT_KEYWORD;}
+{_IMAGINARY}			{return IMAGINARY_KEYWORD;}
+{DO}					{return DO_KEYWORD;}
+{INT}					{return INT_KEYWORD;}
+{SWITCH}				{return SWITCH_KEYWORD;}
+{DOUBLE}				{return DOUBLE_KEYWORD;}
+{LONG}					{return LONG_KEYWORD;}
+{TYPEDEF}				{return TYPEDEF_KEYWORD;}
+{ELSE}					{return ELSE_KEYWORD;}
+{REGISTER}				{return REGISTER_KEYWORD;}
+{UNION}					{return UNION_KEYWORD;}
+
 {ID}                    { yylval.str = new string(yytext);return IDENTIFIER;}
-{INT_CONST}				{ yylval.ival = atoi(yytext); return INTEGER_CONSTANT;}
-{FLOAT_CONST}			{ yylval.dval=atof(yytext); return FLOAT_CONSTANT;}
-{CHAR_CONST}			{ yylval.cval=yytext[1]; return CHAR_CONSTANT;}
-{STRING_LITERAL}        { yylval.str=new string(yytext); return STRING_LITERAL;}
-{SINGLE_COMMENT}    	{;}
-{MULTI_COMMENT}			{;}
-[ \t\v]					;
+
+{INT_CONST}				{ 	yylval.ival = atoi(yytext);
+							return INTEGER_CONSTANT;}
+{FLOAT_CONST}			{ 	yylval.dval=atof(yytext);
+							return FLOAT_CONSTANT;}
+{CHAR_CONST}			{ 	yylval.cval=yytext[1]; 
+							return CHAR_CONSTANT;}
+{STRING_CONST}        	{ 	yylval.str=new string(yytext); 
+							return STRING_LITERAL;}
+
+
 "..."                   { return ELLIPSIS;}
 ">>="                   { return RIGHT_SHIFT_ASSIGN;}
 "<<="                   { return LEFT_SHIFT_ASSIGN;}
@@ -128,7 +180,7 @@ WHITE_SPACE			[ \t\n\v]
 ";"                     { return ';'; }
 
 
-
+{WS}					{/*Ignore whitespaces*/;}
 %%
 
 

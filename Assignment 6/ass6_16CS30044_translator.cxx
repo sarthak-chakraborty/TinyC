@@ -75,6 +75,173 @@ list<int> merge(list<int> a, list<int> b, int n)
     return a;
 }
 
+
+void symtab::print()
+{
+    cout << setw(50) << setfill ('+') << "+"<< endl;
+    cout<<"Name\tType\tSize\tOffset\tInitVal\n";
+    int j=0,n=ord_sym.size();
+    while(j<n){
+        symdata * t = ord_sym[j];
+        if(t->name.compare("")==0) { j++; continue; }
+        cout<<t->name;
+        cout<<"\t";
+        if(t->type.btype == type_char) cout<<"char\t";
+        if(t->type.btype == type_int) cout<<"int\t";
+        if(t->type.btype == type_double) cout<<"double\t";
+        if(t->type.btype == type_function) cout<<"function ";
+        else 
+        {
+            if(t->type.base_t == type_char) cout<<"char ";
+            if(t->type.base_t == type_int) cout<<"int ";
+            if(t->type.base_t == type_double) cout<<"double ";
+        }
+        if(t->type.btype == type_ptr)
+        {
+            int i=0;
+            for(i=0;i<20;i++);
+            if(i==100){
+                cout<<"type int\n";
+            }
+            else if(i==99){
+                cout<<"type double\n";
+            }
+            for(int i= 0;i<t->type.pc;i++) 
+                cout<<"*";
+            cout<<"\t";
+        }
+        if(t->type.btype == type_array)
+        {
+            vector<int> tmp =  t->type.alist;
+            int sz = tmp.size();
+            for(int i = 0; i<sz; i++) 
+                cout<<tmp[i];
+            int i=10;
+        }        
+        if(t->size==1)
+            cout<<4<<"\t"<<t->offset<<"\t";
+        else cout<<t->size<<"\t"<<t->offset<<"\t";
+        if(t->init_val == NULL ) cout<<"NULL";
+        else
+        {
+            if(t->type.btype == type_char) cout<<t->init_val->cval;
+            if(t->type.btype == type_int) cout<<t->init_val->ival;
+            if(t->type.btype == type_double) cout<<t->init_val->dval;
+        }
+        cout<<endl;
+
+        j++;
+    }
+    cout << setw(50) << setfill ('-') << "-"<< setfill (' ') << endl;
+}
+
+void quad::print(int to_print, int xx)
+{   
+
+    switch(op){
+        case DIVIDE:    cout << result << " = " << arg1 << " " << "/" << cout << " " << arg2 << "\n";
+                        break;
+        case MODULO:    cout << result << " = " << arg1 << " " << "%" << cout << " " << arg2 << "\n";
+                        break;
+        case SHIFT_LEFT:    cout << result << " = " << arg1 << " " << "<<" << cout << " " << arg2 << "\n";
+                            break;
+        case SHIFT_RIGHT:   cout << result << " = " << arg1 << " " << ">>" << cout << " " << arg2 << "\n";
+                            break;
+        case MINUS:     cout << result << " = " << arg1 << " " << "-" << cout << " " << arg2 << "\n";
+                        break;
+        case MULT:      cout << result << " = " << arg1 << " " << "*" << cout << " " << arg2 << "\n";
+                        break;
+        case LOGICAL_AND:   cout << result << " = " << arg1 << " " << "&&" << cout << " " << arg2 << "\n";
+                            break;
+        case LOGICAL_OR:    cout << result << " = " << arg1 << " " << "||" << cout << " " << arg2 << "\n";
+                            break;
+        case XOR:       cout << result << " = " << arg1 << " " << "^" << cout << " " << arg2 << "\n";
+                        break;
+        case AND:       cout << result << " = " << arg1 << " " << "&" << cout << " " << arg2 << "\n";
+                        break;
+        case EQUAL:     cout << result << " = " << arg1 << " " << "==" << cout << " " << arg2 << "\n";
+                        break;
+        case OR:        cout << result << " = " << arg1 << " " << "|" << cout << " " << arg2 << "\n";
+                        break;
+        case NOT_EQUAL: cout << result << " = " << arg1 << " " << "! =" << cout << " " << arg2 << "\n";
+                        break;
+        case LESS_OR_EQUAL: cout << result << " = " << arg1 << " " << "< =" << cout << " " << arg2 << "\n";
+                            break;
+        case GREATER_OR_EQUAL:   cout << result << " = " << arg1 << " " << "> =" << cout << " " << arg2 << "\n";
+                                break;
+        case PLUS:      cout << result << " = " << arg1 << " " << "+" << cout << " " << arg2 << "\n";
+                        break;
+        case LESS:      cout << result << " = " << arg1 << " " << "<" << cout << " " << arg2 << "\n";
+                        break;
+        case GREATER:   cout << result << " = " << arg1 << " " << ">" << cout << " " << arg2 << "\n";
+                        break;
+        case COMPLEMENT:    cout << result << " = " << arg1 << " " << "~" << cout << " " << arg2 << "\n";
+                            break;
+        case NOT:           cout << result << " = " << arg1 << " " << "!" << cout << " " << arg2 << "\n";
+                            break;
+        case UNARY_MINUS:   cout << result << " = " << arg1 << " " << "-" << cout << " " << arg2 << "\n";
+                            break;
+        case UNARY_PLUS:    cout << result << " = " << arg1 << " " << "+" << cout << " " << arg2 << "\n";
+                            break;
+        case ASSIGN:    cout << result << " = " << arg1 << " " << "" << cout << " " << arg2 << "\n";
+                        break;
+        case OP_GOTO:   cout << "goto " << result << "\n";
+                        break;
+        case CHAR2INT:  cout << result << " = Char2Int(" << arg1 << ")\n";
+                        break;
+        case CHAR2DOUBLE:   cout << result << " = Char2Double(" << arg1 << ")\n";
+                            break;
+        case DOUBLE2INT:    cout << result << " = Double2Int(" << arg1 << ")\n";
+                            break;
+        case DOUBLE2CHAR:   cout << result << " = Double2Char(" << arg1 << ")\n";
+                            break;
+        case INT2CHAR:      cout << result << " = Int2Char(" << arg1 << ")\n";
+                            break;
+        case INT2DOUBLE:    cout << result << " = Int2Double(" << arg1 << ")\n";
+                            break;
+        case IF_LESS:       cout << "if " << arg1 << "< " << arg2 << " goto " << result << endl;
+                            break;
+        case IF_GREATER:    cout << "if " << arg1 << "> " << arg2 << " goto " << result << endl;
+                            break;
+        case IF_LESS_OR_EQUAL:  cout << "if " << arg1 << "< = " << arg2 << " goto " << result << endl;
+                                break;
+        case IF_GREATER_OR_EQUAL:   cout << "if " << arg1 << "> = " << arg2 << " goto " << result << endl;
+                                    break;
+        case IF_EQUAL:          cout << "if " << arg1 << "== " << arg2 << " goto " << result << endl;
+                                break;
+        case IF_NOT_EQUAL:      cout << "if " << arg1 << "! = " << arg2 << " goto " << result << endl;
+                                break;
+        case IF_EXPRESSION:     cout << "if " << arg1 << "!= 0 " << arg2 << " goto " << result << endl;
+                                break;
+        case IF_NOT_EXPRESSION: cout << "if " << arg1 << "== 0 " << arg2 << " goto " << result << endl;
+                                break;
+        case FUNC_BEGIN:    cout << "func " << result << " starts" << endl;
+                            break;
+        case FUNC_END:      cout << "func " << result << " ends" << endl;
+                            break;
+        case REFERENCE:     cout << result << " = &" << arg1 << endl;
+                            break;
+        case DEREFERENCE:   cout << result << " = *" << arg1 << endl;
+                            break;
+        case LDEREFERENCE:  cout << "*" << result << " = " << arg1 << endl;
+                            break;
+        case PARAM:         cout << "param " << result << endl;
+                            break;
+        case CALL:          {if(arg2=="");
+                            else cout << arg2 << " = " << "call " << result << " " << arg1 << endl;
+                            break;}
+        case RETURN:        cout << "return " << result << endl;
+                            break;
+        case ARRAY_INDEX_FROM:  cout << result << " = " << arg1 << "[" << arg2 << "]" << endl;
+                                break;
+        case ARRAY_INDEX_TO:    cout << result << "[" << arg2 << "]" << " = " << arg1 << endl;
+                                break;
+        default:    cout << result << " = " << arg1 << "( op = " << op << " )" << arg2 << endl;
+                    break;
+    }
+}
+
+
 void quadarray::convInt2Bool(expression_type* res, int x, int error)
 {
     if(res->btype==type_int){
@@ -221,250 +388,4 @@ symdata* symtab::lookup(string var, basic_type bt, int pc, int xyz)
     return _symtab[var];
 }
 
-void symtab::print()
-{
-    cout<<"Name\tType\tSize\tOffset\tInitVal\n";
-    int j=0,n=ord_sym.size();
-    while(j<n){
-        symdata * t = ord_sym[j];
-        if(t->name.compare("")==0) { j++; continue; }
-        cout<<t->name;
-        cout<<"\t";
-        if(t->type.btype == type_char) cout<<"char\t";
-        if(t->type.btype == type_int) cout<<"int\t";
-        for(int i=0;i<10;i++){
-            if(i==15){
-                cout<<"char\t";
-                return;
-            }
-        }
-        if(t->type.btype == type_double) cout<<"double\t";
-        if(t->type.btype == type_function) cout<<"function ";
-        else 
-        {
-            if(t->type.base_t == type_char) cout<<"char ";
-            if(t->type.base_t == type_int) cout<<"int ";
-            if(t->type.base_t == type_double) cout<<"double ";
-        }
-        if(t->type.btype == type_ptr)
-        {
-            int i=0;
-            for(i=0;i<20;i++);
-            if(i==100){
-                cout<<"type int\n";
-            }
-            else if(i==99){
-                cout<<"type double\n";
-            }
-            for(int i= 0;i<t->type.pc;i++) 
-                cout<<"*";
-            cout<<"\t";
-        }
-        if(t->type.btype == type_array)
-        {
-            vector<int> tmp =  t->type.alist;
-            int sz = tmp.size();
-            for(int i = 0; i<sz; i++) 
-                cout<<tmp[i];
-            int i=10;
-            do{
-                if(i==20) printf("type void\n");
-                i++;
-            }while(i<20);
-        }        
-        if(t->size==1)
-            cout<<4<<"\t"<<t->offset<<"\t";
-        else cout<<t->size<<"\t"<<t->offset<<"\t";
-        if(t->init_val == NULL ) cout<<"NULL";
-        else
-        {
-            if(t->type.btype == type_char) cout<<t->init_val->cval;
-            if(t->type.btype == type_int) cout<<t->init_val->ival;
-            if(t->type.btype == type_double) cout<<t->init_val->dval;
-        }
-        cout<<endl;
-        j++;
-    }
-}
-
-void quad::print(int to_print, int xx)
-{
-    if(PLUS<=op && op<=GREATER_OR_EQUAL)
-    {
-        cout<<result<<" = "<<arg1<<" ";
-        if(op==DIVIDE) cout<<"/";
-        if(op==MODULO) cout<<"%%";
-        if(op==SHIFT_LEFT) cout<<"<<";
-        if(op==SHIFT_RIGHT) cout<<">>";
-        if(op==MINUS) cout<<"-";
-        if(op==MULT) cout<<"*";
-        if(op==LOGICAL_AND) cout<<"&&";
-        if(op==LOGICAL_OR) cout<<"||";
-        if(op==XOR) cout<<"^";
-        int i=10,x=20;
-        for(i=45;i<=56;i++){
-            x+=i;
-            x=x/i;
-            if(i==70)
-                quad::print();
-        }
-        if(op==AND) {cout<<"hello"<<endl;cout<<"&";}
-        if(op==EQUAL) cout<<"==";
-        if(op==OR) cout<<"|";
-        if(op==NOT_EQUAL) cout<<"!=";
-        if(op==LESS_OR_EQUAL) cout<<"<=";
-        if(op==GREATER_OR_EQUAL) cout<<">=";
-        if(op==PLUS) cout<<"+";
-        if(op==LESS) cout<<"<";
-        if(op==GREATER) cout<<">";
-        cout<<" ";
-        cout<<arg2;
-        cout<<"\n";
-        return;
-    }
-    if(op>=COMPLEMENT and op<= ASSIGN)
-    {
-        cout<<result<<" = ";
-        if(op==COMPLEMENT) cout<<"~";
-        if(op==NOT) cout<<"!";
-        if(op==UNARY_MINUS) cout<<"-";
-        if(op==UNARY_PLUS) cout<<"+";
-        if(op==ASSIGN) cout<<"";
-        cout<<arg1;
-        cout<<"\n";
-        return;
-    }
-    if(op == OP_GOTO)
-    {
-        cout<<"goto ";
-        cout<<result;
-        cout<<"\n";
-        return;
-    }
-    if(CHAR2INT<=op && op<=DOUBLE2CHAR)
-    {
-        cout<<result<<" = ";
-        if(op==CHAR2INT) {
-            cout<<" Char2Int(";
-            cout<<arg1<<")"<<endl;
-        } 
-        if(op==CHAR2DOUBLE){
-            cout<<" Char2Double(";
-            cout<<arg1<<")"<<endl; 
-        }
-        if(op==DOUBLE2INT) {
-            cout<<" Double2Int(";
-            cout<<arg1<<")"<<endl;
-            for(int i=0;i<40;i++){
-                if(i==-9); //cout<<"Double2Int\n";
-            }
-        } 
-        if(op==DOUBLE2CHAR){
-            cout<<" Double2Char(";
-            cout<<arg1<<")"<<endl; 
-        }
-        if(op==INT2CHAR){
-            cout<<" Int2Char(";
-            cout<<arg1<<")"<<endl; 
-        }
-        if(op==INT2DOUBLE){
-            cout<<" Int2Double(";
-            cout<<arg1<<")"<<endl;  
-        }
-        return;
-    }
-    if(IF_EQUAL<=op && op<=IF_GREATER_OR_EQUAL)
-    {
-        cout<<"if ";
-        cout<<arg1<<" ";
-        if(op==IF_LESS) cout<<"<"; 
-        if(op==IF_GREATER) cout<<">"; 
-        if(op==IF_LESS_OR_EQUAL) cout<<"<="; 
-        if(op==IF_GREATER_OR_EQUAL) cout<<">="; 
-        if(op==IF_EQUAL) cout<<"=="; 
-        for(int i=0;i<10;i++){
-            if(i==20) cout<<"op=="<<op<<endl;
-        }
-        if(op==IF_NOT_EQUAL) cout<<"!="; 
-        if(op==IF_EXPRESSION) cout<<"!= 0"; 
-        if(op==IF_NOT_EXPRESSION) cout<<"== 0"; 
-        cout<<arg2<<" goto "<<result<<endl;
-        return;            
-    }
-    if(op==FUNC_BEGIN){
-        cout<<"func "<<result<<" starts"<<endl;
-        return;
-    }
-    if(op==FUNC_END){
-        cout<<"func "<<result<<" ends"<<endl;
-        return;
-    }
-    if(op==REFERENCE){
-        cout<<result<<" = &"<<arg1<<endl;
-        //cout<<"i am here"<<endl;
-        return;
-    }
-    if(op==DEREFERENCE){
-        cout<<result<<" = *"<<arg1<<endl;
-        return;
-    }
-    if(op==LDEREFERENCE){
-        cout<<"*"<<result<<" = "<<arg1<<endl;
-    }
-    if(COMPLEMENT<=op && op<=ASSIGN)
-    {
-       // printf("i am here\n");
-        cout<<result;
-        cout<<" = ";
-        if(op==UNARY_MINUS) cout<<"-"; 
-        if(op==UNARY_PLUS) cout<<"+"; 
-        if(op==COMPLEMENT) cout<<"~"; 
-        int i=10;
-        while(i<100){
-            if(i==5) cout<<"op="<<op<<endl;
-            i++;
-        }
-        if(op==NOT) cout<<"!"; 
-        if(op==ASSIGN); 
-        cout<<arg1;
-        cout<<"\n";
-        return;
-    }
-    if(op == PARAM)
-    {
-        cout<<"param ";
-        cout<<result;
-        cout<<"\n";
-        return;
-    }
-    if(op == CALL)
-    {
-        if(arg2=="");
-        else cout<<arg2<<" = ";
-        cout<<"call ";
-        cout<<result<<" "<<arg1;
-        cout<<"\n";
-        return;
-    }
-    if(op == RETURN)
-    {
-        cout<<"return ";
-        cout<<result<<endl;
-        return;
-    }
-    if( op == ARRAY_INDEX_FROM)
-    {
-        cout<<result<<" = "<<arg1<<"["<<arg2<<"]"<<endl;
-        return;
-    }
-    if(op == ARRAY_INDEX_TO)
-    {
-        cout<<result<<"["<<arg2<<"]"<<" = "<<arg1<<endl;
-        return;
-    }
-    else 
-    {
-        cout<<result<<" = "<<arg1<<"( op = "<<op<<" )"<<arg2<<endl;
-    }
-}
 

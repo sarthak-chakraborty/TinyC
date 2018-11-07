@@ -16,13 +16,18 @@ int main()
     int a, c, *err;
     err= &c;
     a = readInt(&err);
-    int small=0,large=1,i=1,temp;
-    for(i=1;i<a+1;i++)
+    int n1=1, n2=1, i=1, temp;
+    printInt(n1);
+    printStr(" ");
+    printInt(n2);
+    printStr(" ");
+
+    for(i=3;i<a+1;i++)
     {
-        temp=large;
-        large=small+large;
-        small=temp;
-        printInt(large);
+        temp=n2;
+        n2=n1+n2;
+        n1=temp;
+        printInt(n2);
         printStr(" ");
     }
     printStr("\n");

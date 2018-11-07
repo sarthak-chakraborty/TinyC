@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstring>
 #include <string>
+using namespace std;
 
 extern vector<string> stringnames;
 extern quadarray qar;
@@ -13,8 +14,7 @@ int number_block=100;
 
 void prologue(int num)
 {
-    int a= num/16;
-    a = (a+1)*16;
+    int a = (num/16 + 1)*16;
     cout << "\t.globl\t"<<current_function<<endl;
     cout << "\t.type\t"<<current_function<<", @function"<<endl;
     cout << current_function << ":" << endl;
@@ -26,14 +26,12 @@ void prologue(int num)
 void stringmapping()
 {
     cout << "\t.section\t.rodata"<<endl;
-    vector<string>:: iterator it=stringnames.begin();
-    int number=0;
-    while(it!=stringnames.end())
-    {
+
+    int number = 0;
+    for(vector<string>:: iterator it=stringnames.begin(); it != stringnames.end(); it++){
         cout << ".LC"<<number<< ":"<<endl; 
         cout << "\t.string "<<*it<<endl;
         number++;
-        it++;
     }
 }
 
@@ -145,11 +143,9 @@ void gencode(int abc, double xyz)
                     if(!param){
                         membind-=(*it2)->size;
                         (*it2)->offset=membind;
-                        //cout<<(*it2)->name<<" "<<(*it2)->offset<<endl;
                     }
                     else{
                         (*it2)->offset=membind;
-                        //cout<<"line 623"<<endl;
                         if((*it2)->type.btype==type_ptr) membind+=8;
                         else  membind+=4;
                     }
@@ -171,6 +167,7 @@ void gencode(int abc, double xyz)
 }
 
 stack<vector<string> > parameter_stack;
+
 void code_for_quad(quad q)
 {
     if(q.op == FUNC_BEGIN)
@@ -178,7 +175,8 @@ void code_for_quad(quad q)
         cout<<"\t"<<q.result<<":"<<endl;
         return;
     }
-    string label=q.result;
+
+    string label = q.result;
     bool string_label=(q.result[0]=='.' && q.result[1]=='L' && q.result[2]=='C');
     string printarg1="",printarg2="",printresult="";
     int arg1n=0,arg2n=0,resultn=0;
@@ -188,6 +186,7 @@ void code_for_quad(quad q)
     symdata* f1=symtabvar.justlookup(q.arg1);
     symdata* f2=symtabvar.justlookup(q.arg2); 
     symdata* f3=symtabvar.justlookup(q.result);
+
     if(ST==&symtabvar){
         printarg1=q.arg1;
         printresult=q.result;
@@ -197,7 +196,6 @@ void code_for_quad(quad q)
         if(f1==NULL) arg1n=s1->offset;
         if(f2==NULL) arg2n=s2->offset;
         if(f3==NULL) resultn=s3->offset;
-        //cout<<s1->offset<<" "<<s2->offset<<" "<<s3->offset<<endl;
         if(q.arg1[0]>='9' || q.arg1[0]<='0')
         {
             if(f1==NULL)
@@ -241,190 +239,176 @@ void code_for_quad(quad q)
             }
         }
     }
-    if(string_label) printresult=label;
-    if(q.op==ASSIGN)
-    {
-        if(q.arg1[0]>='0' && q.arg1[0]<='9')
-        {           
-            //movl  $1, -4(%ebp)
-            cout<<"\t"<<"movl"<<"\t$"<<q.arg1<<","<<"\t"<<printresult<<endl;
-        }
-        else
-        {
-            //a = bcout
-            cout<<"\t"<<"movl"<<"\t"<<printarg1<<",\t%eax"<<endl; 
-            cout<<"\t"<<"movl"<<"\t"<<"%eax,\t"<<printresult<<"\t"<<endl; 
-        }
+    if(string_label)
+        printresult=label;
+
+    switch(q.op){
+        case ASSIGN:    if(q.arg1[0]>='0' && q.arg1[0]<='9'){ 
+                            //b=1          
+                            cout<<"\t"<<"movl"<<"\t$"<<q.arg1<<","<<"\t"<<printresult<<endl;
+                        }
+                        else{
+                            //b=a
+                            cout<<"\t"<<"movl"<<"\t"<<printarg1<<",\t%eax"<<endl; 
+                            cout<<"\t"<<"movl"<<"\t"<<"%eax,\t"<<printresult<<"\t"<<endl; 
+                        }
+                        break;
+
+        case UNARY_MINUS:   cout << "\t" << "movl" << "\t" <<printarg1<< ",\t%eax" << endl; 
+                            cout << "\t" << "negl\t %eax"<< endl;
+                            cout << "\t" << "movl" << "\t" << "%eax,\t" << printresult << "\t"  << endl;
+                            break;
+
+        case PLUS:  if((q.arg2.compare("1"))==0){
+                        //b=a+1
+                        cout << "\t" << "movl" << "\t" <<printarg1<< "," << "\t%edx" << endl;
+                        cout << "\t" << "addl\t $1,\t %edx" << endl;
+                        cout << "\t" << "movl\t %edx,\t %eax" << endl;
+                        cout << "\t" << "movl \t %eax,\t"  << printresult<< endl;
+                    }
+                    else{
+                        //a=b+c
+                        cout << "\t" << "movl\t" <<printarg1<<",\t%edx" << endl; 
+                        if(q.arg2[0]>=0 && q.arg2[0]<=9)
+                        cout << "\t" << "movl\t$" << q.arg2 << "," << "%eax" << endl;
+                        else      
+                        cout << "\t" << "movl\t" <<printarg2 << ",\t%eax" << endl;
+                        cout << "\t" << "addl\t %edx,\t %eax" << endl;
+                        cout << "\t" << "movl\t %eax,\t"  << printresult  << endl;     
+                    }
+                    break;
+
+        case MINUS: if((q.arg2).compare("1")==0)
+                    {
+                        //b=a-1
+                        cout << "\t" << "movl\t" <<printarg1<< ",\t%edx" << endl;
+                        cout << "\t" << "subl\t $1,\t %edx" << endl;
+                        cout << "\t" << "movl\t %edx,\t %eax" << endl;
+                        cout << "\t" << "movl \t %eax,\t" << printresult<< endl;
+                    }
+                    else
+                    {
+                        //a=b-c
+                        cout << "\t" << "movl\t" <<printarg1<< ",\t%edx" << endl;
+                        cout << "\t" << "movl\t" <<printarg2 << ",\t%eax" << endl;
+                        cout << "\t" << "subl\t %eax,\t%edx" << endl;
+                        cout << "\t" << "movl\t %edx,\t%eax" << endl;
+                        cout << "\t" << "movl \t %eax,\t"  << printresult<< endl;       
+                    } 
+                    break;
+
+        case MULT:  //a=b*c
+                    cout << "\t"<<"movl\t" <<printarg1 << ",\t%eax" << endl; 
+                    if(q.arg2[0]>='0' && q.arg2[0]<='9')
+                        cout << "\t" << "imull\t$" << q.arg2 << "," << "%eax" << endl;
+                    else cout << "\t"<<"imull\t" <<printarg2 << ",\t%eax" << endl;        
+                    cout << "\t"<<"movl\t %eax,\t"  << printresult<< endl;      
+                    break;
+
+        case DIVIDE:     //a=b/c
+                        cout << "\t" << "movl\t" <<printarg1 << ",\t%eax" << endl;
+                        cout << "\t" << "cltd" << endl;
+                        cout << "\t" << "idivl\t"<< printarg2 << endl;
+                        cout << "\t" << "movl \t %eax,\t"  << printresult<< endl;
+                        break;
+
+        case MODULO:    //a=b%c
+                        cout << "\t" << "movl\t" <<printarg1 << ",\t%eax" << endl;
+                        cout << "\t" << "cltd" << endl;
+                        cout << "\t" << "idivl\t"<< printarg2 << endl;
+                        cout << "\t" << "movl \t %edx,\t"  << printresult << endl;
+                        break;
+
+        case OP_GOTO:   cout << "\t" << "jmp\t" <<q.result << endl;
+                        break;
+
+        case IF_LESS:   //  if a < b goto L1
+                        cout << "\t" << "movl\t" <<printarg2 << "," << "\t%eax" << endl;
+                        cout << "\t" << "cmpl\t" <<printarg1 << "," << "\t%eax" << endl;
+                        cout << "\t" << "jle\t" << ".L" << number_block << endl;
+                        cout << "\t" << "jmp\t" <<q.result << endl;
+                        cout << ".L" << number_block  << ":" << endl;
+                        number_block++;
+                        break;
+
+        case IF_GREATER:     //  if a > b goto L1
+                            cout << "\t" << "movl\t" <<printarg2 << "," << "\t%eax" << endl;
+                            cout << "\t" << "cmpl\t" << printarg1 << "," << "\t%eax" << endl;
+                            cout << "\t" << "jge\t" << ".L" << number_block << endl;
+                            cout << "\t" << "jmp\t" <<q.result << endl;
+                            cout << ".L" << number_block  << ":" << endl;
+                            number_block++;
+                            break;
+
+        case IF_EQUAL:  //if a == b goto L1
+                        cout << "\t" << "movl\t" <<printarg1 << "," << "\t%eax" << endl;
+                        cout << "\t" << "cmpl\t" <<printarg2 << "," << "\t%eax" << endl;
+                        cout << "\t" << "jne\t" << ".L" << number_block << endl;
+                        cout << "\t" << "jmp\t" <<q.result << endl;
+                        cout << ".L" << number_block  << ":" << endl;number_block++;
+                        break;
+
+        case IF_NOT_EQUAL:  //if a != b goto L1
+                            cout << "\t" << "movl\t" <<printarg1<< "," << "\t%eax" << endl;
+                            cout << "\t" << "cmpl\t" <<printarg2 << "," << "\t%eax" << endl;
+                            cout << "\t" << "je\t" << ".L" << number_block << endl;
+                            cout << "\t" << "jmp\t" <<q.result << endl;
+                            cout << ".L" << number_block  << ":" << endl;number_block++;
+                            break;
+
+        case IF_EXPRESSION: cout << "\t" << "cmpl\t$0,\t"<<printarg1<< endl; 
+                            cout << "\t" << "je\t.L"<< number_block<<endl; 
+                            cout << "\t" << "jmp\t"<<q.result<<endl;
+                            cout << ".L" <<number_block<<" : "<< endl;  
+                            number_block++;
+                            break;
+
+        case IF_NOT_EXPRESSION: cout << "\t" << "cmpl\t$0,\t"<<printarg1<< endl; 
+                                cout << "\t" << "jne\t.L"<< number_block<<endl; 
+                                cout << "\t" << "jmp\t"<<q.result<<endl;
+                                cout << ".L" <<number_block<<" : "<< endl;  
+                                number_block++;
+                                break;
+
+        case PARAM: stringstream ss1, ss2,ss3;
+                    vector<string> temp;
+                    if(s3->type.btype==type_char)
+                    {
+                        ss1<<"\tmovzbl\t"<<printresult<<",%rax"<<endl;
+                        ss3<<"\tmovq\t%rax,%rdi"<<endl;
+                    }
+                    else if(s3->type.base_t==type_array)
+                    {
+                        ss1<<"\tleaq\t"<<printresult<<",%rax"<<endl;
+                        ss3<<"\tmovq\t%rax,%rdi"<<endl;
+                    }
+                    else if(printresult[0]=='.')
+                    {
+                        ss1 << "\t" << "movq\t$"<<printresult<<",\t%rdi"<< endl;
+                        ss2<<"\tpushq\t$"<<printresult<<endl;
+                        temp.push_back(ss1.str());
+                        temp.push_back(ss2.str());
+                        parameter_stack.push(temp);
+                        return ;
+                    }
+                    else if(q.result[0]>='0' && q.result[0]<='9')
+                        ss1 << "\t" << "movq\t"<<q.result<<",\t%rdi"<< endl;
+                    else{
+                        //cout<<"line 883"<<endl;
+                        ss1 << "\t" << "movq\t"<<printresult<<",\t%rax"<< endl;
+                        ss3 << "\t" << "movq\t%rax,%rdi"<<endl;            
+                    }
+                    ss2 << "\t" << "pushq\t%rax"<< endl;   
+                    temp.push_back(ss1.str()); 
+                    temp.push_back(ss3.str());
+                    temp.push_back(ss2.str());
+                    parameter_stack.push(temp);
+                    break;
+
     }
-    else if(q.op==UNARY_MINUS)
-    {
-        //a=-b
-        //cout<<"line 722"<<endl;
-        cout << "\t" << "movl" << "\t" <<printarg1<< ",\t%eax" << endl; 
-        cout << "\t" << "negl\t %eax"<< endl;
-        cout << "\t" << "movl" << "\t" << "%eax,\t" << printresult << "\t"  << endl; 
-    }
-    else if(q.op==PLUS){
-        if((q.arg2.compare("1"))==0)
-        {
-            //b=a+1
-            cout << "\t" << "movl" << "\t" <<printarg1<< "," << "\t%edx" << endl;
-            cout << "\t" << "addl\t $1,\t %edx" << endl;
-            cout << "\t" << "movl\t %edx,\t %eax" << endl;
-            cout << "\t" << "movl \t %eax,\t"  << printresult<< endl;
-        }
-        else
-        {
-            //a=b+c
-            cout << "\t" << "movl\t" <<printarg1<<",\t%edx" << endl; 
-            if(q.arg2[0]>=0 && q.arg2[0]<=9)
-            cout << "\t" << "movl\t$" << q.arg2 << "," << "%eax" << endl;
-            else      
-            cout << "\t" << "movl\t" <<printarg2 << ",\t%eax" << endl;
-            cout << "\t" << "addl\t %edx,\t %eax" << endl;
-            cout << "\t" << "movl\t %eax,\t"  << printresult  << endl;     
-        }
-    }
-    else if(q.op==MINUS){
-        if((q.arg2).compare("1")==0)
-        {
-            //b=a-1
-            cout << "\t" << "movl\t" <<printarg1<< ",\t%edx" << endl;
-            cout << "\t" << "subl\t $1,\t %edx" << endl;
-            cout << "\t" << "movl\t %edx,\t %eax" << endl;
-            cout << "\t" << "movl \t %eax,\t" << printresult<< endl;
-        }
-        else
-        {
-            //a=b-c
-            cout << "\t" << "movl\t" <<printarg1<< ",\t%edx" << endl;
-            cout << "\t" << "movl\t" <<printarg2 << ",\t%eax" << endl;
-            cout << "\t" << "subl\t %eax,\t%edx" << endl;
-            cout << "\t" << "movl\t %edx,\t%eax" << endl;
-            cout << "\t" << "movl \t %eax,\t"  << printresult<< endl;       
-        }                       
-    }
-    else if(q.op==MULT)
-    {
-        //a=b*c
-        cout << "\t"<<"movl\t" <<printarg1 << ",\t%eax" << endl; 
-        if(q.arg2[0]>='0' && q.arg2[0]<='9')
-            cout << "\t" << "imull\t$" << q.arg2 << "," << "%eax" << endl;
-        else cout << "\t"<<"imull\t" <<printarg2 << ",\t%eax" << endl;        
-        cout << "\t"<<"movl\t %eax,\t"  << printresult<< endl;                   
-    }
-    else if(q.op==DIVIDE)
-    {
-        //a=b/c
-        cout << "\t" << "movl\t" <<printarg1 << ",\t%eax" << endl;
-        cout << "\t" << "cltd" << endl;
-        cout << "\t" << "idivl\t"<< printarg2 << endl;
-        cout << "\t" << "movl \t %eax,\t"  << printresult<< endl;      
-    }
-    else if(q.op==MODULO)
-    {
-        //a=b%c
-        cout << "\t" << "movl\t" <<printarg1 << ",\t%eax" << endl;
-        cout << "\t" << "cltd" << endl;
-        cout << "\t" << "idivl\t"<< printarg2 << endl;
-        cout << "\t" << "movl \t %edx,\t"  << printresult << endl;      
-    }
-    else if(q.op==OP_GOTO)
-    {
-        cout << "\t" << "jmp\t" <<q.result << endl;
-    }
-    else if(q.op==IF_LESS)
-    {
-        //  if a < b goto L1
-        cout << "\t" << "movl\t" <<printarg1 << "," << "\t%eax" << endl;
-        cout << "\t" << "cmpl\t" <<printarg2 << "," << "\t%eax" << endl;
-        cout << "\t" << "jge\t" << ".L" << number_block << endl;
-        cout << "\t" << "jmp\t" <<q.result << endl;
-        cout << ".L" << number_block  << ":" << endl;
-        number_block++;
-    }
-    else if(q.op==IF_GREATER)
-    {
-        //  if a > b goto L1
-        cout << "\t" << "movl\t" <<printarg2 << "," << "\t%eax" << endl;
-        cout << "\t" << "cmpl\t" << printarg1 << "," << "\t%eax" << endl;
-        cout << "\t" << "jle\t" << ".L" << number_block << endl;
-        cout << "\t" << "jmp\t" <<q.result << endl;
-        cout << ".L" << number_block  << ":" << endl;
-        number_block++;
-    }
-    else if(q.op==IF_EQUAL)
-    {
-        //if a == b goto L1
-        cout << "\t" << "movl\t" <<printarg1 << "," << "\t%eax" << endl;
-        cout << "\t" << "cmpl\t" <<printarg2 << "," << "\t%eax" << endl;
-        cout << "\t" << "jne\t" << ".L" << number_block << endl;
-        cout << "\t" << "jmp\t" <<q.result << endl;
-        cout << ".L" << number_block  << ":" << endl;number_block++;
-    }
-    else if(q.op==IF_NOT_EQUAL)
-    {
-        //if a != b goto L1
-        cout << "\t" << "movl\t" <<printarg1<< "," << "\t%eax" << endl;
-        cout << "\t" << "cmpl\t" <<printarg2 << "," << "\t%eax" << endl;
-        cout << "\t" << "je\t" << ".L" << number_block << endl;
-        cout << "\t" << "jmp\t" <<q.result << endl;
-        cout << ".L" << number_block  << ":" << endl;number_block++;
-    }
-    else if(q.op==IF_EXPRESSION)
-    {  
-        cout << "\t" << "cmpl\t$0,\t"<<printarg1<< endl; 
-        cout << "\t" << "je\t.L"<< number_block<<endl; 
-        cout << "\t" << "jmp\t"<<q.result<<endl;
-        cout << ".L" <<number_block<<" : "<< endl;  
-        number_block++;
-    }
-    else if(q.op==IF_NOT_EXPRESSION)
-    {
-        cout << "\t" << "cmpl\t$0,\t"<<printarg1<< endl; 
-        cout << "\t" << "jne\t.L"<< number_block<<endl; 
-        cout << "\t" << "jmp\t"<<q.result<<endl;
-        cout << ".L" <<number_block<<" : "<< endl;  
-        number_block++;     
-    }
-    else if(q.op==PARAM)
-    {        
-        stringstream ss1, ss2,ss3;
-        vector<string> temp;
-        //cout<<s1->type.btype<<" "<<s2->type.btype<<" "<<s3->type.btype<<endl;
-        if(s3->type.btype==type_char)
-        {
-            ss1<<"\tmovzbl\t"<<printresult<<",%rax"<<endl;
-            ss3<<"\tmovq\t%rax,%rdi"<<endl;
-        }
-        else if(s3->type.base_t==type_array)
-        {
-            ss1<<"\tleaq\t"<<printresult<<",%rax"<<endl;
-            ss3<<"\tmovq\t%rax,%rdi"<<endl;
-        }
-        else if(printresult[0]=='.')
-        {
-            ss1 << "\t" << "movq\t$"<<printresult<<",\t%rdi"<< endl;
-            ss2<<"\tpushq\t$"<<printresult<<endl;
-            temp.push_back(ss1.str());
-            temp.push_back(ss2.str());
-            parameter_stack.push(temp);
-            return ;
-        }
-        else if(q.result[0]>='0' && q.result[0]<='9')
-            ss1 << "\t" << "movq\t"<<q.result<<",\t%rdi"<< endl;
-        else{
-            //cout<<"line 883"<<endl;
-            ss1 << "\t" << "movq\t"<<printresult<<",\t%rax"<< endl;
-            ss3 << "\t" << "movq\t%rax,%rdi"<<endl;            
-        }
-        ss2 << "\t" << "pushq\t%rax"<< endl;   
-        temp.push_back(ss1.str()); 
-        temp.push_back(ss3.str());
-        temp.push_back(ss2.str());
-        parameter_stack.push(temp);
-    }
-    else if(q.op==CALL)
+
+
+    if(q.op==CALL)
     {
         while(parameter_stack.size())
         {
@@ -446,7 +430,6 @@ void code_for_quad(quad q)
         cout << "\t" << "addq\t$"<<num<<",\t%rsp"<< endl;
         if(q.arg2 != "")  //# to store return value to its place 
         {
-            //cout<<"return val"<<endl;
             if(s3->type.base_t==type_array || s3->type.btype==type_ptr)
                 cout<<"\tleaq\t%rax,\t"<<printarg2<<endl;
             cout << "\t" << "movq\t%rax,\t"<<printarg2<< endl;
@@ -474,7 +457,6 @@ void code_for_quad(quad q)
     else if(q.op==ARRAY_INDEX_TO) // L_INDEX
     {
         //x[i] = b
-        //printf("\tmovl\t%%edx, %d(%%rbp, %%rax)\n",res->offset);
         stringstream ss4;
         ss4<<"\tmovl\t"<<printarg2<<",%eax"<<endl;
         ss4<<"\timull\t$4,"<<"%eax"<<endl;
@@ -497,13 +479,13 @@ void code_for_quad(quad q)
     else if(q.op==DEREFERENCE)
     {
         // a=*p
-        //cout<<"line 935"<<endl;
         cout << "\t" << "movq\t"<<printarg1<<",\t%rax"<<endl;
         cout << "\t" << "movl\t(%rax),\t %eax"<<endl;
         cout << "\t" << "movl\t%eax,\t"<< printresult<< endl;
     }
     else if(q.op==LDEREFERENCE)
     {
+        // *p=a
         cout<<"\tmovq\t"<<printresult<<",%rax"<<endl;
         cout<<"\tmovl\t"<<printarg1<<",%edx"<<endl;
         cout<<"\tmovl\t%edx,(%rax)"<<endl;

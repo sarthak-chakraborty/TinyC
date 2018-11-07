@@ -1,0 +1,18 @@
+NAME: Sarthak Chakraborty
+
+COMPILERS ASSIGNMENT 6
+
+-------------------------------------------------------
+				SHORTCOMINGS
+-------------------------------------------------------
+
+	The grammar that the compiler TinyC supports is a restricted subset of the grammar of the language C. Hence not all the statements of C will be supported by the grammar. Some of them are:
+-> sizeof, comma, complex assignement operator are not supported.
+-> Declarations within "for" is nopt supported.
+-> switch case construct is not supported.
+-> Complex expressions are not supported.
+-> Rules not asked in the grammar list, if encountered results in segmentstion fault.
+
+	Array handling and pointer handling is not supported by the compiler. Also, recursive functions is not supported.
+If programs using these above types of instructions are used, it will result to segmentation fault on an attempt to
+run the program. However, loops are well supported and hence iteration can be performed using TinyC.

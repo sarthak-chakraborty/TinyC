@@ -1,19 +1,17 @@
 
-
-
-%{ /* C Declarations and Definitions */
-#include <string>
-#include <bits/stdc++.h>
-using namespace std;
-void yyerror(string s);
-extern int yydebug;
-extern int yylex();
-#include "ass6_16CS30044_translator.h"
-quadarray qar;
-symtab symtabvar;
-symtab *ST = &(symtabvar);
-vector<string> stringnames;
-int strct=0;
+%{
+    #include <string>
+    #include <bits/stdc++.h>
+    using namespace std;
+    void yyerror(string s);
+    extern int yydebug;
+    extern int yylex();
+    #include "ass6_16CS30044_translator.h"
+    quadarray qar;
+    symtab symtabvar;
+    symtab *ST = &(symtabvar);
+    vector<string> stringnames;
+    int strct=0;
 %}
 
 
@@ -37,30 +35,64 @@ int strct=0;
 
 %token SIZEOF_KEYWORD
 %token POINTER_OP 
-%token INCREMENT_OP DECREMENT_OP LEFT_SHIFT_OP 
-%token RIGHT_SHIFT_OP LESS_EQUAL_OP GREATER_EQUAL_OP EQUAL_OP NOT_EQUAL_OP
-%token LOGICAL_AND_OP LOGICAL_OR_OP MUL_ASSIGN 
-%token DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
-%token SUB_ASSIGN LEFT_SHIFT_ASSIGN 
-%token RIGHT_SHIFT_ASSIGN AND_ASSIGN
+%token INCREMENT_OP 
+%token DECREMENT_OP 
+%token LEFT_SHIFT_OP 
+%token RIGHT_SHIFT_OP 
+%token LESS_EQUAL_OP 
+%token GREATER_EQUAL_OP 
+%token EQUAL_OP 
+%token NOT_EQUAL_OP
+%token LOGICAL_AND_OP 
+%token LOGICAL_OR_OP 
+%token MUL_ASSIGN 
+%token DIV_ASSIGN 
+%token MOD_ASSIGN 
+%token ADD_ASSIGN
+%token SUB_ASSIGN 
+%token LEFT_SHIFT_ASSIGN 
+%token RIGHT_SHIFT_ASSIGN 
+%token AND_ASSIGN
 %token XOR_ASSIGN 
-%token OR_ASSIGN TYPE_NAME
-
-%token TYPEDEF_KEYWORD EXTERN_KEYWORD 
-%token STATIC_KEYWORD AUTO_KEYWORD REGISTER_KEYWORD
-%token CHAR_KEYWORD  SHORT_KEYWORD  INT_KEYWORD  LONG_KEYWORD  SIGNED_KEYWORD 
-%token UNSIGNED_KEYWORD  FLOAT_KEYWORD  DOUBLE_KEYWORD  
-%token CONST_KEYWORD RESTRICT_KEYWORD VOLATILE_KEYWORD VOID_KEYWORD
-%token BOOL_KEYWORD COMPLEX_KEYWORD IMAGINARY_KEYWORD
+%token OR_ASSIGN 
+%token TYPE_NAME
+%token TYPEDEF_KEYWORD 
+%token EXTERN_KEYWORD 
+%token STATIC_KEYWORD 
+%token AUTO_KEYWORD 
+%token REGISTER_KEYWORD
+%token CHAR_KEYWORD  
+%token SHORT_KEYWORD  
+%token INT_KEYWORD  
+%token LONG_KEYWORD  
+%token SIGNED_KEYWORD 
+%token UNSIGNED_KEYWORD  
+%token FLOAT_KEYWORD  
+%token DOUBLE_KEYWORD  
+%token CONST_KEYWORD 
+%token RESTRICT_KEYWORD 
+%token VOLATILE_KEYWORD 
+%token VOID_KEYWORD
+%token BOOL_KEYWORD 
+%token COMPLEX_KEYWORD 
+%token IMAGINARY_KEYWORD
 %token INLINE_KEYWORD
-%token STRUCT_KEYWORD UNION_KEYWORD
-%token ENUM_KEYWORD ELLIPSIS
-
-%token CASE_KEYWORD DEFAULT_KEYWORD IF_KEYWORD 
-%token ELSE_KEYWORD SWITCH_KEYWORD WHILE_KEYWORD 
-%token DO_KEYWORD FOR_KEYWORD GOTO_KEYWORD CONTINUE_KEYWORD
-%token BREAK_KEYWORD RETURN_KEYWORD
-
+%token STRUCT_KEYWORD 
+%token UNION_KEYWORD
+%token ENUM_KEYWORD 
+%token ELLIPSIS
+%token CASE_KEYWORD 
+%token DEFAULT_KEYWORD 
+%token IF_KEYWORD 
+%token ELSE_KEYWORD 
+%token SWITCH_KEYWORD 
+%token WHILE_KEYWORD 
+%token DO_KEYWORD 
+%token FOR_KEYWORD 
+%token GOTO_KEYWORD 
+%token CONTINUE_KEYWORD
+%token BREAK_KEYWORD 
+%token RETURN_KEYWORD
 %token<str> STRING_LITERAL IDENTIFIER
 %token<ival> INTEGER_CONSTANT
 %token<dval> FLOAT_CONSTANT
@@ -88,11 +120,8 @@ int strct=0;
 
 %%
 
-// Augmentation Rules in  Grammer
 
-// N is introduced to get an exit point from the location it was parsed in the Quad code this is backpatched later
-N
-:                                                                             
+N :                                                                             
 {
     $$ =  new expression_type;  
     $$->nextlist = makelist(qar.nextinstr); 
@@ -100,9 +129,7 @@ N
 }
 ;
 
-// M is introduced to be a marker for an entry point to starting of parsed Quad code
-M
-:                                                                             
+M :                                                                             
 {
     $$ =  new expression_type; 
     $$->instr = qar.nextinstr; 
